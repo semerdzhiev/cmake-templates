@@ -1,0 +1,95 @@
+= Sample Templates for CMake Projects
+:source-highlighter: highlight.js
+
+== Description
+
+This repository contains several sample templates for CMake projects.
+
+minimal/::
+A minimalistic template with a very simple `CMakeLists.txt` file. Just the bare minimum to get you started on a simple project.
+
+simple/::
+A basic template with support for unit testing with the Catch2 framework. Catch2 is automatically retrieved from its GitHub  repository using `FetchContent`.
+
+standard/::
+A template with support for several commonly used libraries and project documentation generation. External libraries are retrieved as git submodules.
+
+For a detailed description of what is included in each template and instructions on how to use them, please refer to the README files in the respective directories.
+
+
+== How to use the templates
+
+1. To base your work on one of the templates, simply copy it somewhere, edit the existing files as necessary and add your own stuff.
+
+2. If you plan to use Git, initialize the repository:
++
+[source,bash]
+git init
++
+Probably you will also want to add a remote and set up tracking branches, for example:
++
+[source,bash]
+git remote set-url origin <your-remote>
+git push -u origin main
++
+Note that each template comes with its own `.gitignore` file. take a look at what's inside and edit it, as you see fit.
+
+3. If the template uses submodules, after initializing the repository, run the necessary command to initialize submodules and retrieve their contents:
++
+[source,bash]
+git submodule init
+git submodule update
+
+4. Refer to each template's README file for specific build instructions, information on what is included, etc.
+
+
+== Building a project
+
+To build your CMake project and run the tests, first go to your project's directory. Inside it create a directory for an out-of-source build (e.g. `build/`). Go inside it and then generate the build files there. Finally, build the project and run the tests.
+
+For example, if your project is located in `C:\projects\my project`, then the list of commands may look like what is shown below. If you are not using unit tests, skip the `ctest` line.
+
+[source,bash]
+cd "C:\projects\my project"
+mkdir build
+cd build
+cmake ..
+cmake --build .
+ctest
+
+Every time you alter `CMakeLists.txt`, you will need to refresh the build files. You can do it either by going to the `build/` directory and running:
+
+[source,bash]
+cmake ..
+
+or by specifying the directories explicitly, in which case you can run the command from another directory too:
+
+[source,bash]
+cmake -S "C:\projects\my project" -O "C:\projects\my project\build"
+
+To rebuild, you need to run CMake and pass the `--build` parameter. Again, you can do it by going in the `build/` directory and running:
+
+[source,bash]
+cmake --build .
+
+Or by specifying the directory explicitly:
+
+[source,bash]
+cmake --build "C:\projects\my project"
+
+
+== Speeding up the builds
+
+The `CMakeLists.txt` files, in all projects, contain the necessary directive, which passes the https://learn.microsoft.com/en-us/cpp/build/reference/mp-build-with-multiple-processes?view=msvc-170[`/MP` switch] to Visual C++, so that jobs are ran in parallel. This may (or may not) significantly speed up build times.
+
+Another option is to use CMake's https://cmake.org/cmake/help/latest/manual/cmake.1.html#build-tool-mode[`--parallel`/`-j` switch]:
+
+[source,bash]
+cmake --build . --parallel
+
+If you want to specify the number of jobs, you can do so:
+
+[source,bash]
+cmake --build . --parallel 8
+
+The topic is complicated and as of the time of writing of this tutorial, there is no one definitive answer on how to approach it. Check out https://stackoverflow.com/a/70102570[this reply on Stackoverflow] for more details and additional references.

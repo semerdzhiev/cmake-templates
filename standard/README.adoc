@@ -1,0 +1,75 @@
+= CMake project template
+:toc: left
+:source-highlighter: rouge
+:url-catch2: https://github.com/catchorg/Catch2
+:url-cmake-cache: https://cmake.org/cmake/help/book/mastering-cmake/chapter/CMake%20Cache.html
+:url-cmake-presets: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
+:url-doxygen: https://doxygen.nl/
+:url-tclap: http://tclap.sourceforge.net/
+:url-git-submodules: https://git-scm.com/book/en/v2/Git-Tools-Submodules
+
+
+== Overview
+
+This repository contains a template for new CMake projects. Some of its features are listed below.
+
+* Pre-created basic directory layout
+* `.gitignore` file with some basic definitions
+* {url-doxygen}[Doxygen] support for building documentation
+* Support for some commonly used libraries:
+** {url-catch2}[Catch2] for unit testing
+** {url-tclap}[TCLAP] for parsing of command line arguments
+
+There are other things too. Take a look inside the `CMakeLists.txt` file.
+
+Note that {url-doxygen}[Doxygen] must be properly installed on your system in order to work with this template.
+
+For more information on the individual features and how to use the template see the sections below.
+
+== .gitignore
+
+The `.gitignore` file contains the following definitions:
+
+* Several commonly used directories. Currently `.vs`, `out` and `build`.
+* {url-cmake-presets}[`CMakeUserPresets.json`] local presets file.
+
+
+== Directory Layout
+
+`docs/`::
+Sources for building the documentation of the project.
+`lib/`::
+External libraries.
+`src/`::
+Sources for building the project.
+`test/`::
+Tests related to the project.
+
+
+== External Libraries and Git Submodules
+
+The following libraries are made available as {url-git-submodules}[git submodules]. They are organized in the `lib/` subdirectory.
+
+* {url-catch2}[Catch2] for unit testing.
+* {url-tclap}[TCLAP] for command line argument processing.
+
+On first use, do not forget to initialize the submodules and retrieve their contents:
+
+[source,bash]
+git submodule init
+git submodule update
+
+== Project options
+
+The following options are available in the `CMakeLists.txt` file. They control what gets included in the generated build files.
+
+IMPORTANT: If you modify the options at a later point in time, remember to update the {url-cmake-cache}[CMake cache].
+
+`ENABLE_TESTING`::
+Specifies whether to enable unit testing for the project.
+This option will include the unit testing framework and will also build the test targets.
+`ENABLE_DOCUMENTATION`::
+Specifies whether to enable building the project documentation.
+This option will include a target which runs Doxygen.
+`ENABLE_TCLAP`::
+Specifies whether to add TCLAPs include path.

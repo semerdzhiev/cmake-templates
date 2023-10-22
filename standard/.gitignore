@@ -1,0 +1,9 @@
+# Visual Studio directories
+/.vs
+/out
+
+# Common names for output directories
+/build
+
+# CMake local configuration options
+CMakeUserPresets.json
