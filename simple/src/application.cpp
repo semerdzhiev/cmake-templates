@@ -34,5 +34,5 @@ int main(int argc, char* argv[])
 	}
 
 	int value = std::atoi(argv[1]);
-	std::cout << value << "! = " << factorial(value) << std::endl;
+	std::cout << value << "! = " << fibonacci(value) << std::endl;
 }

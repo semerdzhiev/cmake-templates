@@ -1,6 +1,6 @@
-cmake_minimum_required (VERSION 3.13)
+cmake_minimum_required (VERSION 3.24)
 
-project ("Simple CMake Template" VERSION 1.2)
+project ("Simple CMake Template" VERSION 1.3)
 
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -13,74 +13,109 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 #
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
+# Makes it easier to display some useful info
+include(CMakePrintHelpers)
 
-# Library target for the sample library
-add_library(samplelib STATIC)
+# Uncomment the line below, if you want to specify additional
+# locations to be searched by find_package and include.
+# For example, a local cmake/ direcory within the project, etc.
+# list(PREPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
-set_target_properties(samplelib PROPERTIES OUTPUT_NAME "sample")
-
-target_sources(
-	samplelib
-	PRIVATE
-		"src/library.cpp"
-		"src/library.h"
-)
-
-
-# Executable target for the application
-add_executable(application)
-
-set_target_properties(application PROPERTIES OUTPUT_NAME "calc")
-
-target_link_libraries(
-	application
-	PRIVATE
-		samplelib
-)
-
-target_sources(
-	application
-	PRIVATE
-		"src/application.cpp"
-)
+# Display some useful information
+cmake_print_variables(CMAKE_MODULE_PATH)
+cmake_print_variables(CMAKE_PREFIX_PATH)
 
 
+
+################################################################################
 #
-# Make Catch2 available. For more information check
-# https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
+# Unit testing
 #
-Include(FetchContent)
 
-FetchContent_Declare(
-  Catch2
-  GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-  GIT_TAG        v3.1.1)
-
-FetchContent_MakeAvailable(Catch2)
-
-list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-
-
-# Executable target for the unit tests
-add_executable(unit-tests)
-
-target_link_libraries(
-	unit-tests
-	PRIVATE
-		samplelib
-		Catch2::Catch2WithMain
-)
-
-target_include_directories(unit-tests PRIVATE "src")
-
-target_sources(
-	unit-tests
-	PRIVATE
-		"test/library_test.cpp"
-)
-
-
-# Automatically register all tests
+# Configure the project for testing with CTest/CDash
+# Automatically adds the BUILD_TESTING option and sets it to ON
+# If BUILD_TESTING is ON, automatically calls enable_testing().
+# Check the following resources for more info:
+#   https://cmake.org/cmake/help/latest/module/CTest.html
+#   https://cmake.org/cmake/help/latest/command/enable_testing.html
+#   https://cmake.org/cmake/help/latest/manual/ctest.1.html
 include(CTest)
-include(Catch)
-catch_discover_tests(unit-tests)
+
+
+# Make Catch2 available
+if(BUILD_TESTING)
+
+  message(STATUS "Make Catch2 available...")
+
+  if(EXISTS ${CMAKE_SOURCE_DIR}/lib/Catch2)
+
+    # If Catch2's repo has been cloned to the /lib directory, use that    
+    add_subdirectory(${CMAKE_SOURCE_DIR}/lib/Catch2)
+  
+  else()
+
+    # Try to either find a local installation of Catch2,
+    # or download it from its repository.
+    #
+    # You can find more information on how FetchContent works and
+    # what is the order of locations being searched in these sources:
+    #
+    # Using Dependencies Guide
+    #   https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html#guide:Using%20Dependencies%20Guide
+    # FetchContent examples:
+    #   https://cmake.org/cmake/help/latest/module/FetchContent.html#fetchcontent-find-package-integration-examples
+    # If necessary, set up FETCHCONTENT_TRY_FIND_PACKAGE_MODE. Check:
+    #   https://cmake.org/cmake/help/latest/module/FetchContent.html#variable:FETCHCONTENT_TRY_FIND_PACKAGE_MODE
+    # For Catch2's own documentation on CMake integration check:
+    #   https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
+    
+    include(FetchContent)
+
+    # FIND_PACKAGE_ARGS makes it so that CMake first tries to find
+    # CMake with find_package() and if it is NOT found, it will
+    # be retrieved from its repository.
+    FetchContent_Declare(
+        Catch2
+        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+        GIT_TAG        v3.4.0
+        FIND_PACKAGE_ARGS
+    )
+
+    FetchContent_MakeAvailable(Catch2)
+
+    # The line below was necessary when Catch2 was obtained with FetchContent,
+    # as described here:
+    #   https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md)
+    # This does not seem to be the case anymore.
+    # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
+
+  endif()
+
+  # Include the Catch module, which provides catch_discover_tests
+  include(Catch)
+
+  # Status messages
+  cmake_print_variables(Catch2_DIR)
+  cmake_print_variables(catch2_SOURCE_DIR)
+  cmake_print_variables(Catch2_SOURCE_DIR)
+  cmake_print_variables(CMAKE_MODULE_PATH)
+
+endif()
+
+
+
+################################################################################
+#
+# Targets
+#
+
+# Add the src/ directory to the include path of all targets
+include_directories("src")
+
+# Executable and library targets
+add_subdirectory(src)
+
+# Unit testing
+if(BUILD_TESTING)
+  add_subdirectory(test)
+endif()

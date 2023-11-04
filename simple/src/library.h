@@ -1,3 +1,3 @@
 #pragma once
 
-unsigned int factorial(unsigned int n);
+unsigned int fibonacci(unsigned int n);

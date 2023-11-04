@@ -2,8 +2,12 @@
 :toc: left
 :source-highlighter: highlight.js
 :url-catch2: https://github.com/catchorg/Catch2
+:url-catch2-install: https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md#installing-catch2-from-git-repository
 :url-cmake-fetch-content: https://cmake.org/cmake/help/latest/module/FetchContent.html
 :url-cmake-presets: https://cmake.org/cmake/help/latest/manual/cmake-presets.7.html
+:url-cmake-cmake-prefix-path: https://cmake.org/cmake/help/latest/variable/CMAKE_PREFIX_PATH.html
+:url-cmake-cmake-prefix-path-envvar: https://cmake.org/cmake/help/latest/envvar/CMAKE_PREFIX_PATH.html
+:url-git-submodule: https://git-scm.com/book/en/v2/Git-Tools-Submodules
 
 This repository contains a simple template for new CMake projects.
 
@@ -18,14 +22,50 @@ The `.gitignore` file contains the following definitions:
 
 == Directory Layout
 
-There is a single `CMakeLists.txt` file located in the root of the project.
-
 `src/`::
 Sources for building the project.
 `test/`::
 Tests related to the project.
+`lib/`::
+The template assumes that external/third-party libraries you download will go inside this directory.
 
-== External Libraries
+== Catch2
 
-The template uses {url-cmake-fetch-content}[`FetchContent`] to automatically retrieve {url-catch2}[Catch2].
+The template uses {url-catch2}[Catch2] for unit testing.
+It attempts to locate a local copy of Catch2 and if one does not exist, fetches it from the GitHub repository.
 
+=== Local copy within the project
+
+If you want to clone a local copy of the repository, put it inside a `lib/Catch2/` directory at the root of the project. The template will detect the directory and use `add_subdirectory` on it.
+
+You can do this directly:
+
+[source,bash]
+git clone -- git@github.com:catchorg/Catch2.git lib/Catch2
+
+or as a {url-git-submodule}[submodule]:
+
+[source,bash]
+git submodule add -- git@github.com:catchorg/Catch2.git lib/Catch2
+
+To make the latter step easier, a `.gitmodules` file is provided with the template. Once you initialize a repository for the project, you can simply do:
+
+[source,bash]
+git submodule init
+git submodule update
+
+=== Local installation
+
+If you don't have Catch2 cloned as described above, but you {url-catch2-install}[have installed it locally], the template will load it via `find_package()`.
+
+If you have used a non-standard location for the installation, you will have to explicitly specify it. For example you can do one of the following:
+
+* Within the `CMakeLists.txt` file, there is a line which sets the value of the {url-cmake-cmake-prefix-path}[`CMAKE_PREFIX_PATH`] variable. Uncomment it and add the path(s) you want to use.
+* At the OS level, set up an environment variable called {url-cmake-cmake-prefix-path-envvar}[`CMAKE_PREFIX_PATH`] and specify the location there.
+
+
+=== Automatically fetch
+
+Finaly, if there is no local copy of Catch2, the template will download it using {url-cmake-fetch-content}[`FetchContent`].
+
+If you want to specify the version to be downloaded, search for the call to `FetchContent_Declare` inside the `CMakeLists.txt` file. It specifies the tag/commit to obtain.
