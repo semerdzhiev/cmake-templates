@@ -1,5 +1,6 @@
 = Sample Templates for CMake Projects
 :source-highlighter: highlight.js
+:toc:
 
 == Description
 
@@ -93,3 +94,21 @@ If you want to specify the number of jobs, you can do so:
 cmake --build . --parallel 8
 
 The topic is complicated and as of the time of writing of this tutorial, there is no one definitive answer on how to approach it. Check out https://stackoverflow.com/a/70102570[this reply on Stackoverflow] for more details and additional references.
+
+== Visual Studio Code Setup
+
+You may want to install the following Visual Studio Code extensions. Each extensions is listed with its ID and name.
+
+When searching for the extensions, we recommend that you look them up by their ID. That's because there may be multiple extensions with the same name.
+
+https://marketplace.visualstudio.com/items?itemName=ms-vscode.cpptools-extension-pack[`ms-vscode.cpptools-extension-pack`]::
+C/C++ Extension pack by Microsoft
+
+https://marketplace.visualstudio.com/items?itemName=fredericbonnet.cmake-test-adapter[`fredericbonnet.cmake-test-adapter`]::
+CMake Test Explorer by Frédéric Bonnet
+
+https://marketplace.visualstudio.com/items?itemName=hbenl.vscode-test-explorer[`hbenl.vscode-test-explorer`]::
+Test Explorer UI by Holger Benl
+
+https://marketplace.visualstudio.com/items?itemName=ms-vscode.test-adapter-converter[`ms-vscode.test-adapter-converter`]::
+Test Adapter Converter by Microsoft
