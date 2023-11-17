@@ -66,7 +66,7 @@ cmake ..
 or by specifying the directories explicitly, in which case you can run the command from another directory too:
 
 [source,bash]
-cmake -S "C:\projects\my project" -O "C:\projects\my project\build"
+cmake -S "C:\projects\my project" -B "C:\projects\my project\build"
 
 To rebuild, you need to run CMake and pass the `--build` parameter. Again, you can do it by going in the `build/` directory and running:
 
