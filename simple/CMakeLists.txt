@@ -24,7 +24,7 @@ include(CMakePrintHelpers)
 # Display some useful information
 cmake_print_variables(CMAKE_MODULE_PATH)
 cmake_print_variables(CMAKE_PREFIX_PATH)
-
+cmake_print_variables(CMAKE_INSTALL_PREFIX)
 
 
 ################################################################################
@@ -77,7 +77,7 @@ if(BUILD_TESTING)
     FetchContent_Declare(
         Catch2
         GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v3.4.0
+        GIT_TAG        v3.9.1
         FIND_PACKAGE_ARGS
     )
 
