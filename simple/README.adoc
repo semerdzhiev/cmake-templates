@@ -17,7 +17,7 @@ For more information on the individual features, see the sections below.
 
 The `.gitignore` file contains the following definitions:
 
-* Several commonly used directories. Currently `.vs/`, `out/` and `build/`.
+* Several commonly used directories like `.vs/`, `out/` and `build/`.
 * {url-cmake-presets}[`CMakeUserPresets.json`] local presets file.
 
 == Directory Layout
@@ -36,23 +36,17 @@ It attempts to locate a local copy of Catch2 and if one does not exist, fetches 
 
 === Local copy within the project
 
-If you want to clone a local copy of the repository, put it inside a `lib/Catch2/` directory at the root of the project. The template will detect the directory and use `add_subdirectory` on it.
+If you want to clone a local copy of the repository, put it inside a `lib/Catch2/` directory at the root of the project. The template will detect it automatically.
 
 You can do this directly:
 
 [source,bash]
-git clone -- git@github.com:catchorg/Catch2.git lib/Catch2
+git clone git@github.com:catchorg/Catch2.git lib/Catch2
 
 or as a {url-git-submodule}[submodule]:
 
 [source,bash]
 git submodule add -- git@github.com:catchorg/Catch2.git lib/Catch2
-
-To make the latter step easier, a `.gitmodules` file is provided with the template. Once you initialize a repository for the project, you can simply do:
-
-[source,bash]
-git submodule init
-git submodule update
 
 === Local installation
 

@@ -2,29 +2,27 @@ cmake_minimum_required (VERSION 3.24)
 
 project ("Simple CMake Template" VERSION 1.3)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-#
-# Tell MSVC to build using multiple processes.
-# This may speed up compilation time significantly.
-# For more information check:
-# https://learn.microsoft.com/en-us/cpp/build/reference/mp-build-with-multiple-processes?view=msvc-170
-#
-add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
 # Makes it easier to display some useful info
 include(CMakePrintHelpers)
 
 # Uncomment the line below, if you want to specify additional
 # locations to be searched by find_package and include.
-# For example, a local cmake/ direcory within the project, etc.
+# For example, a local cmake/ directory within the project, etc.
 # list(PREPEND CMAKE_PREFIX_PATH ${CMAKE_SOURCE_DIR}/cmake)
 
 # Display some useful information
 cmake_print_variables(CMAKE_MODULE_PATH)
 cmake_print_variables(CMAKE_PREFIX_PATH)
 cmake_print_variables(CMAKE_INSTALL_PREFIX)
+
+# Custom modules are located in the ./cmake/ directory
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
+
+# Include the library finder module
+include(FindOrFetch)
 
 
 ################################################################################
@@ -41,76 +39,71 @@ cmake_print_variables(CMAKE_INSTALL_PREFIX)
 #   https://cmake.org/cmake/help/latest/manual/ctest.1.html
 include(CTest)
 
-
-# Make Catch2 available
 if(BUILD_TESTING)
 
-  message(STATUS "Make Catch2 available...")
+  # In this project we will be using Catch2.
+  # Notes on CMake integration are provided in the documentation:
+  #   https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
 
-  if(EXISTS ${CMAKE_SOURCE_DIR}/lib/Catch2)
+  find_or_fetch_library(
+    NAME           Catch2
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG        v3.9.1
+  )
 
-    # If Catch2's repo has been cloned to the /lib directory, use that    
-    add_subdirectory(${CMAKE_SOURCE_DIR}/lib/Catch2)
-  
-  else()
-
-    # Try to either find a local installation of Catch2,
-    # or download it from its repository.
-    #
-    # You can find more information on how FetchContent works and
-    # what is the order of locations being searched in these sources:
-    #
-    # Using Dependencies Guide
-    #   https://cmake.org/cmake/help/latest/guide/using-dependencies/index.html#guide:Using%20Dependencies%20Guide
-    # FetchContent examples:
-    #   https://cmake.org/cmake/help/latest/module/FetchContent.html#fetchcontent-find-package-integration-examples
-    # If necessary, set up FETCHCONTENT_TRY_FIND_PACKAGE_MODE. Check:
-    #   https://cmake.org/cmake/help/latest/module/FetchContent.html#variable:FETCHCONTENT_TRY_FIND_PACKAGE_MODE
-    # For Catch2's own documentation on CMake integration check:
-    #   https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md
-    
-    include(FetchContent)
-
-    # FIND_PACKAGE_ARGS makes it so that CMake first tries to find
-    # CMake with find_package() and if it is NOT found, it will
-    # be retrieved from its repository.
-    FetchContent_Declare(
-        Catch2
-        GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-        GIT_TAG        v3.9.1
-        FIND_PACKAGE_ARGS
-    )
-
-    FetchContent_MakeAvailable(Catch2)
-
-    # The line below was necessary when Catch2 was obtained with FetchContent,
-    # as described here:
-    #   https://github.com/catchorg/Catch2/blob/devel/docs/cmake-integration.md)
-    # This does not seem to be the case anymore.
-    # list(APPEND CMAKE_MODULE_PATH ${catch2_SOURCE_DIR}/extras)
-
-  endif()
+  # Status messages
+  #cmake_print_variables(catch2_SOURCE_DIR)
 
   # Include the Catch module, which provides catch_discover_tests
   include(Catch)
 
-  # Status messages
-  cmake_print_variables(Catch2_DIR)
-  cmake_print_variables(catch2_SOURCE_DIR)
-  cmake_print_variables(Catch2_SOURCE_DIR)
-  cmake_print_variables(CMAKE_MODULE_PATH)
-
 endif()
 
+
+################################################################################
+#
+# Additional libraries
+#
+
+# find_or_fetch_library(
+#   NAME           TCLAP
+#   GIT_REPOSITORY git://git.code.sf.net/p/tclap/code
+#   GIT_TAG        77561f5fab620e0857a04c240ae981f679449e15
+# )
+
+# find_or_fetch_library(
+#   NAME           spdlog
+#   GIT_REPOSITORY git@github.com:gabime/spdlog.git
+#   GIT_TAG        v1.16.0
+# )
+
+
+################################################################################
+#
+# Configuration settings which apply to all projects
+# and are related to how they are being built.
+#
+
+#
+# Tell MSVC to build using multiple processes.
+# This may speed up compilation time significantly.
+# For more information check:
+# https://learn.microsoft.com/en-us/cpp/build/reference/mp-build-with-multiple-processes?view=msvc-170
+#
+add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
+
+# Specifies that executables should be placed in the "/bin" subfolder of the output directory.
+# Remove/comment this line below if you prefer to have the default behavior.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+
+# Add the src/ directory to the include path of all targets
+include_directories("src")
 
 
 ################################################################################
 #
 # Targets
 #
-
-# Add the src/ directory to the include path of all targets
-include_directories("src")
 
 # Executable and library targets
 add_subdirectory(src)
