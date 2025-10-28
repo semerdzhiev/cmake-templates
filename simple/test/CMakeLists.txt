@@ -15,4 +15,4 @@ target_sources(
 )
 
 # Automatically register all tests
-catch_discover_tests(unit-tests)
+catch_discover_tests(unit-tests ADD_TAGS_AS_LABELS)
