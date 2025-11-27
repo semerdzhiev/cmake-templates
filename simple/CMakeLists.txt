@@ -8,6 +8,11 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # Makes it easier to display some useful info
 include(CMakePrintHelpers)
 
+# Get a list of all compile options
+# Works only for generators that support this functionality.
+# https://cmake.org/cmake/help/latest/variable/CMAKE_EXPORT_COMPILE_COMMANDS.html
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 # Uncomment the line below, if you want to specify additional
 # locations to be searched by find_package and include.
 # For example, a local cmake/ directory within the project, etc.

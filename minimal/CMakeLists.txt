@@ -5,6 +5,11 @@ project ("Minimalistic CMake Template" VERSION 1.0)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Get a list of all compile options
+# Works only for generators that support this functionality.
+# https://cmake.org/cmake/help/latest/variable/CMAKE_EXPORT_COMPILE_COMMANDS.html
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 #
 # Tell MSVC to build using multiple processes.
 # This may speed up compilation time significantly.
