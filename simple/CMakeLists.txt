@@ -97,9 +97,11 @@ endif()
 #
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
-# Specifies that executables should be placed in the "/bin" subfolder of the output directory.
-# Remove/comment this line below if you prefer to have the default behavior.
+# Executables will go into a "/bin" subfolder of the output directory.
+# Libraries will go into a "/lib" subfolder of the output directory.
+# Remove/comment the lines below if you prefer to have the default behavior.
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # Add the src/ directory to the include path of all targets
 include_directories("src")

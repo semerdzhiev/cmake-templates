@@ -18,6 +18,11 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 #
 add_compile_options($<$<CXX_COMPILER_ID:MSVC>:/MP>)
 
+# Executables will go into a "/bin" subfolder of the output directory.
+# Libraries will go into a "/lib" subfolder of the output directory.
+# Remove/comment the lines below if you prefer to have the default behavior.
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin")
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # Main target
 add_executable(application)
