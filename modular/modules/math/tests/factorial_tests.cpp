@@ -1,4 +1,4 @@
-#include <catch2/catch_test_macros.hpp>
+#include "catch2/catch_all.hpp"
 #include <myproject/math/calculator.h>
 
 using myproject::math::factorial;
