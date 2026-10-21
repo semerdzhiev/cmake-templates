@@ -13,4 +13,5 @@ target_link_libraries(myproject_math_tests PRIVATE
 catch_discover_tests(myproject_math_tests
     TEST_PREFIX "math::"
     PROPERTIES LABELS "math"
+	ADD_TAGS_AS_LABELS    
 )
