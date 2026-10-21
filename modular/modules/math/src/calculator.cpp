@@ -1,3 +1,7 @@
+#include <myproject/math/calculator.h>
+
+namespace myproject::math {
+
 /// Calculates the factorial of n
 int factorial(int n)
 {
@@ -9,8 +13,8 @@ int factorial(int n)
 	return result;
 }
 
-/// Calculates the n-th fibbonachi number
-int fibbonachi(int n)
+/// Calculates the n-th Fibonacci number
+int fibonacci(int n)
 {
 	int a = 1, b = 0;
 
@@ -21,3 +25,5 @@ int fibbonachi(int n)
 
 	return b;
 }
+
+} // namespace myproject::math

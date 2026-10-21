@@ -6,6 +6,7 @@ target_link_libraries(
     PRIVATE
         samplelib
         Catch2::Catch2WithMain
+        myproject::build_options
 )
 
 target_sources(

@@ -1,6 +1,7 @@
-#include "catch2/catch_all.hpp"
-#include "mathlib/mathlib.h"
+#include <catch2/catch_test_macros.hpp>
+#include <myproject/math/calculator.h>
 
+using myproject::math::factorial;
 
 TEST_CASE("factorial of 0 is 1")
 {

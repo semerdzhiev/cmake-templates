@@ -1,0 +1,10 @@
+# Minimal, CMake-configured Doxygen input file.
+PROJECT_NAME           = "@PROJECT_NAME@"
+PROJECT_NUMBER         = "@PROJECT_VERSION@"
+OUTPUT_DIRECTORY       = "@CMAKE_CURRENT_BINARY_DIR@"
+INPUT                  = "@PROJECT_SOURCE_DIR@/modules"
+RECURSIVE              = YES
+FILE_PATTERNS          = *.hpp *.h *.cpp
+GENERATE_HTML          = YES
+GENERATE_LATEX         = NO
+QUIET                  = YES

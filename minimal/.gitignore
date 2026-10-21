@@ -1,6 +1,13 @@
-.vs/
+# Out-of-source CMake builds
+/.build/
+/build/
+/out/
+/cmake-build-*/
+
+# Editor and generated files
 .vscode/
-.build/
-build/
-out/
-CMakeUserPresets.json
+.idea/
+*.user
+
+# Developer-specific CMake presets
+/CMakeUserPresets.json
