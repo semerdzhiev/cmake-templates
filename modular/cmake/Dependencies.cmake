@@ -7,7 +7,6 @@ include(FetchContent)
 # Use this one to manually specify where the library is located.
 # For example, under the lib/ directory
 # set(FETCHCONTENT_SOURCE_DIR_SPDLOG "${PROJECT_SOURCE_DIR}/lib/spdlog")
-# set(FETCHCONTENT_SOURCE_DIR_TCLAP "${PROJECT_SOURCE_DIR}/lib/TCLAP")
 
 # FetchContent_Declare(
 #     spdlog
