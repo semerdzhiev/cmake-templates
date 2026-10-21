@@ -2,6 +2,16 @@ cmake_minimum_required(VERSION 3.24)
 
 project(MyProject VERSION 1.1 LANGUAGES CXX)
 
+# Project ID will be used as a prefix for all
+# targets and their aliases.
+# Since it is also used in the actual C++ code
+# for namespaces and subdirs, make sure it
+# is a valid C/C++ identifier.
+# You can also set PROJECT_ID manually:
+# set(PROJECT_ID "some_prefix")
+string(TOLOWER "${CMAKE_PROJECT_NAME}" PROJECT_ID)
+string(MAKE_C_IDENTIFIER "${PROJECT_ID}" PROJECT_ID)
+
 # Shared build settings and general-purpose dependencies
 include(cmake/ProjectSettings.cmake)
 include(cmake/Dependencies.cmake)

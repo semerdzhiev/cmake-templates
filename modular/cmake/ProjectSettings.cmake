@@ -11,18 +11,18 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib")
 
 # Usage requirements shared by our own targets; avoid global compiler options.
-add_library(myproject_build_options INTERFACE)
-add_library(myproject::build_options ALIAS myproject_build_options)
+add_library("${PROJECT_ID}_build_options" INTERFACE)
+add_library("${PROJECT_ID}::build_options" ALIAS "${PROJECT_ID}_build_options")
 
 # Tell MSVC to build using multiple processes.
 # This may speed up compilation time significantly.
 # For more information check:
 # https://learn.microsoft.com/en-us/cpp/build/reference/mp-build-with-multiple-processes?view=msvc-170
-target_compile_options(myproject_build_options INTERFACE
+target_compile_options("${PROJECT_ID}_build_options" INTERFACE
     "$<$<COMPILE_LANG_AND_ID:CXX,MSVC>:/MP>"
 )
 
 # C++ standard version shared with our own targets
-add_library(myproject_cxx_version INTERFACE)
-add_library(myproject::cxx_version ALIAS myproject_cxx_version)
-target_compile_features(myproject_cxx_version INTERFACE cxx_std_20)
+add_library("${PROJECT_ID}_cxx_version" INTERFACE)
+add_library("${PROJECT_ID}::cxx_version" ALIAS "${PROJECT_ID}_cxx_version")
+target_compile_features("${PROJECT_ID}_cxx_version" INTERFACE cxx_std_20)
