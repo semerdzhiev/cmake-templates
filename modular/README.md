@@ -1,8 +1,10 @@
 # MyProject — modular C++/CMake scaffold
 
-A starter for CMake 3.24+ and C++20 with module-local tests. `math` and
-`parser` are minimal example modules; delete or rename their example code
-as you adapt the template.
+A simple starter template for CMake 3.24
+
+`math` and `cli` are examples. Delete or rename them to adapt to your project.
+
+You will also probably want to replate all occurrances of `myproject` to the identifier of your own project.
 
 ## Layout
 
@@ -14,58 +16,33 @@ MyProject/
 │   ├── Dependencies.cmake
 │   ├── FindOrFetch.cmake
 │   └── Testing.cmake
-├── modules/
-│   ├── math/
-│   │   ├── CMakeLists.txt
-│   │   ├── include/myproject/math/calculator.hpp
-│   │   ├── src/calculator.cpp
-│   │   └── tests/
-│   │       ├── CMakeLists.txt
-│   │       └── calculator_tests.cpp
-│   └── parser/
-│       ├── CMakeLists.txt
-│       ├── include/myproject/parser/parser.hpp
-│       ├── src/parser.cpp
-│       └── tests/
-│           ├── CMakeLists.txt
-│           └── parser_tests.cpp
-├── apps/cli/
-│   ├── CMakeLists.txt
-│   └── main.cpp
-├── docs/
+├── modules/ # Your reusable modules
+├── apps/    # Your applications
+├── docs/    # Documentation building (Doxygen based)
 │   ├── CMakeLists.txt
 │   └── Doxyfile.in
-└── lib/                # Optional vendored third-party CMake projects
+└── lib/     # Third-party libraries
 ```
 
 ## Build
 
-Requires a C++20 compiler and CMake 3.24+.
+Requires CMake 3.24+.
+To build tests, Catch2 v3 is needed.
+The template first tries to locate a locally installed copy
+and then falls back to fetching it from the GitHub repo.
 
 ```sh
-cmake -S . -B build -DBUILD_TESTING=OFF
-cmake --build build
-./build/bin/myproject_cli  # On Windows: use the corresponding .exe and config directory
-```
+cmake -S . -B .build
+cmake --build .build
 
-To build tests, Catch2 v3 is needed. The template first checks `lib/Catch2`,
-then tries an installed CMake package, then fetches pinned Catch2 v3.9.1
-from Git. **The Git fallback requires network access during configuration.**
+# Build just one module's tests
+cmake --build build --target myproject_math_tests
 
-```sh
-cmake -S . -B build -DBUILD_TESTING=ON
-cmake --build build
-ctest --test-dir build --output-on-failure
+# Run all tests
+ctest --test-dir .build --output-on-failure
 
 # Run tests from one module
 ctest --test-dir build -L math --output-on-failure
-ctest --test-dir build -L parser --output-on-failure
-```
-
-To build just one module's tests:
-
-```sh
-cmake --build build --target myproject_math_tests
 ```
 
 ## Optional documentation
@@ -95,10 +72,13 @@ Target names are *global*, even across subdirectories: use unique prefixes.
 ## CMake design
 
 - `CMakeLists.txt` at the root wires together modules, application, and options.
-- `cmake/ProjectSettings.cmake` exposes `myproject::options`, an INTERFACE
-  target holding C++20 and MSVC `/MP` requirements for your own targets.
+- `cmake/ProjectSettings.cmake` exposes several INTERFACE targets
+  you can link in your own targets:
+  - `myproject::options` adds the MSVC `/MP` switch
+  - `myproject::cxx_version` sets a common C++ version
 - `cmake/FindOrFetch.cmake` contains reusable dependency resolution code.
-- `cmake/Dependencies.cmake` lists non-test third-party dependencies.
+- `cmake/Dependencies.cmake` lists third-party dependencies.
+  Note that `Catch2` is not listed there.
 - `cmake/Testing.cmake` resolves Catch2 once and loads Catch's test-discovery helper.
 - Each module owns its own library target and executable test target.
 - CTest collects test cases globally via `catch_discover_tests()`; labels
