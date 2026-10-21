@@ -4,7 +4,16 @@ A simple starter template for CMake 3.24
 
 `math` and `cli` are examples. Delete or rename them to adapt to your project.
 
-You will also probably want to replate all occurrances of `myproject` to the identifier of your own project.
+You will also probably want to replate all occurrances of `myproject` to the identifier of your own project:
+
+- `cmake\ProjectSettings.cmake`
+- Within each module in `modules/` and `apps/` check
+  the following files/directories (if present):
+  - `CMakeLists.txt` file
+  - `tests/CMakeLists.txt`
+  - Rename the `include/myproject` directory
+  - Fix all `#include` directives that refer to `myproject`.
+  - Fix all namespace-related code that refers to `myproject`.
 
 ## Layout
 
