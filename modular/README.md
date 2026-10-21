@@ -45,13 +45,13 @@ cmake -S . -B .build
 cmake --build .build
 
 # Build just one module's tests
-cmake --build build --target myproject_math_tests
+cmake --build .build --target myproject_math_tests
 
 # Run all tests
 ctest --test-dir .build --output-on-failure
 
-# Run tests from one module
-ctest --test-dir build -L math --output-on-failure
+# Run tests with a given label
+ctest --test-dir .build -L math --output-on-failure
 ```
 
 ## Optional documentation
